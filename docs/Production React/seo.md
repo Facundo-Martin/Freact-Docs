@@ -1,10 +1,10 @@
 ---
-sidebar_position: 5
+sidebar_position: 4
 ---
 
-# Deploy your site
+# SEO
 
-Docusaurus is a **static-site-generator** (also called **[Jamstack](https://jamstack.org/)**).
+Implementing SEO best practices with Next.js
 
 It builds your site as simple **static HTML, JavaScript and CSS files**.
 

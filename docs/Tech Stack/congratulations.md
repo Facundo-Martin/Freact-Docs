@@ -1,10 +1,10 @@
 ---
-sidebar_position: 6
+sidebar_position: 5
 ---
 
-# Congratulations!
+# Additional Configs
 
-You have just learned the **basics of Docusaurus** and made some changes to the **initial template**.
+Configuring **[Prettier](https://prettier.io/)**, **[ESLint](https://eslint.org/)**, **[Git Hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)**, and **[CI/CD pipelines](https://www.redhat.com/en/topics/devops/what-cicd-pipeline)**
 
 Docusaurus has **much more to offer**!
 

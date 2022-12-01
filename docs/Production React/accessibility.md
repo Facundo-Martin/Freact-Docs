@@ -1,10 +1,10 @@
 ---
-sidebar_position: 3
+sidebar_position: 6
 ---
 
-# Create a Blog Post
+# Accessibility
 
-Docusaurus creates a **page for each blog post**, but also a **blog index page**, a **tag system**, an **RSS** feed...
+Accessibility checklist and aspects to take into account
 
 ## Create your first Post
 

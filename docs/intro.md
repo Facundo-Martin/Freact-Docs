@@ -3,9 +3,15 @@ sidebar_position: 1
 slug: /
 ---
 
-# Tutorial Intro
+# Freact Intro
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Freact is a **Front End + React Documentation site** built with the mission of helping and guiding developers in the process of building **production ready React applications**.
+
+It's main objective is to supplement the uncertainty and lack of guidance when it comes to building React applications. Some of the topics that will be discussed are:
+
+- Choosing the right [Tech Stack](https://nodejs.org/en/download/)(Frameworks and UI libraries)
+- Initial configuration (prettier, eslint, git hooks)
+- CI/CD pipelines
 
 ## Getting Started
 

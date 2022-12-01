@@ -1,10 +1,10 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
-# Create a Page
+# CI/CD Pipelines
 
-Add **Markdown or React** files to `src/pages` to create a **standalone page**:
+Explore **Next.js** and all the features it brings to your development
 
 - `src/pages/index.js` → `localhost:3000/`
 - `src/pages/foo.md` → `localhost:3000/foo`
@@ -15,8 +15,8 @@ Add **Markdown or React** files to `src/pages` to create a **standalone page**:
 Create a file at `src/pages/my-react-page.js`:
 
 ```jsx title="src/pages/my-react-page.js"
-import React from 'react';
-import Layout from '@theme/Layout';
+import React from "react";
+import Layout from "@theme/Layout";
 
 export default function MyReactPage() {
   return (
