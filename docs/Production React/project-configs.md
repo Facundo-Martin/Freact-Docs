@@ -33,10 +33,29 @@ npm install --save-dev --save-exact prettier
 Next, create a .prettierignore file to let the Prettier CLI and editors know which files to not format. Here’s an example:
 
 ```
-# Ignore artifacts:
-build
-coverage
+node_modules/
+public/
+build/
 ```
+
+## Prettier scripts
+
+```json
+{
+  "name": "nextjs-starter",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "prettier:fix": "prettier --write .",
+    "prettier:check": "prettier --check ."
+  },
+```
+
+You can run these scripts manually to try them out, but after installing ESLint we will automate these with Git Hooks + Husky.
+
+## Prettier configuration
 
 Last but not least, create a **.prettierrc** configuration file to fully customize your experience. Prettier ships with a handful of [format options](https://prettier.io/docs/en/options.html) to fully customize your experience, but here's a base configuration example:
 
@@ -50,6 +69,8 @@ Last but not least, create a **.prettierrc** configuration file to fully customi
 "trailingComma": "all"
 }
 ```
+
+If you are using VSCode, make sure to go to Settings > Formatter and select Prettier as your Default Formatter. You will also want to enable the "Format on Save" option
 
 ## ESLint Installation
 
@@ -140,11 +161,11 @@ After we install the dependencies, we can head to our package.json file and chec
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
     "test": "jest",
     "test:ci": "jest --ci",
-    "postinstall": "husky install"
-  },
+    "lint": "next lint"
+  }
+}
 ```
 
 ## ESLint Configuration
@@ -224,6 +245,8 @@ This is the config file
 }
 ```
 
+For additional information on rules, you can install Lintel on VSCode and use their GUI to further understand ESLint configuration.
+
 ## Git Hooks + Husky
 
 [Git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) are shell scripts found in the hidden .git/hooks directory of a Git repository. These scripts trigger actions in response to specific events, so they can help you **automate your development lifecycle**. There are lots of git hooks, but in this guide we will be primarily looking into the pre-commit hook.
@@ -232,9 +255,60 @@ The **pre-commit** hook is run first, before you even type in a commit message. 
 
 You can do things like check for code style (run lint or something equivalent), check for trailing whitespace (the default hook does exactly this), or check for appropriate documentation on new methods.
 
-The prepare-commit-msg hook is run before the commit message editor is fired up but after the default message is created. It lets you edit the default message before the commit author sees it. This hook takes a few parameters: the path to the file that holds the commit message so far, the type of commit, and the commit SHA-1 if this is an amended commit. This hook generally isn’t useful for normal commits; rather, it’s good for commits where the default message is auto-generated, such as templated commit messages, merge commits, squashed commits, and amended commits. You may use it in conjunction with a commit template to programmatically insert information.
+The important thing to understand is that the pre-commit hook will run before the commit. So for the commit to go through, the pre-commit has to succeed.
+
+## Husky
+
+husky-init is a one-time command to quickly initialize a project with husky.
+
+```
+npx husky-init && npm install
+```
+
+After running this command, you will notice that a .husky folder was created with a pre-commit file in it.
+
+## Husky scripts
+
+lint-staged allows you to only run thes commands when certain files are being staged or committed
+
+```json
+//package.json file
+...
+"scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "jest",
+    "test:ci": "jest --ci",
+    "lint": "next lint"
+  }
+ "devDependencies": {
+    "husky": "^4.3.5",
+    "lint-staged": "^10.5.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "yarn eslint",
+      "yarn lint --fix",
+      "yarn prettier --write",
+      "yarn test"
+
+    ]
+  }
+```
+
+We're also gonna take a look at the post-merged hook
 
 ## What's next?
+
+Running ESLint, or prettier, or even tests as part of your git workflow is important because it helps you fail fast. However, it's not a replacement for CI checks. Typically, you'll want to run these commands in both environments to ensure nothing slips through.
+
+But altogether these tools help ensure a cleaner, more consistent production codebase. Long term, that's a big win for any project.
 
 - Read the [official documentation](https://docusaurus.io/)
 - Modify your site configuration with [`docusaurus.config.js`](https://docusaurus.io/docs/api/docusaurus-config)
