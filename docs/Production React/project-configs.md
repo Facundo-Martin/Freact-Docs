@@ -116,7 +116,9 @@ Again, we are building a web application with React after all.
 - **Use a popular style guide**
 - Answer questions about your style
 
-We are going to use [Airbnb's code style guide](https://github.com/airbnb/javascript), but feel free to explore other options.
+[Airbnb's code style guide](https://github.com/airbnb/javascript) is a very popular style guide for JavaScript. However, it does not support TypeScript at the moment.
+
+Since we are going to be using TypeScript, we will select the [Standard code style guide](https://github.com/standard/eslint-config-standard-with-typescript).
 
 7. What format do you want your config file to be in?
 
@@ -130,7 +132,15 @@ After we are done with the configuration, ESLint will prompt a message with all 
 
 copiar aca eso cuando lo haga
 
-Would you like toinstall these now with npm? No / **Yes**
+Would you like toinstall these ? No / **Yes**
+
+Which package manager do you want to use?
+
+- **npm**
+- yarn
+- pnpm
+
+If you decide to use yarn instead of npm, select no and manually install these with yarn.
 
 Keep in mind that these are all dev dependencies, they will not be shipped into the browser. You might also want to install [eslint-config-airbnb-typescript
 ](https://www.npmjs.com/package/eslint-config-airbnb-typescript), which enhances Airbnb's ESLint config with TypeScript support.
@@ -142,6 +152,25 @@ npm install eslint-config-airbnb-typescript --save-dev
 After we install the dependencies, we can head to our package.json file and check them out.
 
 ## ESLint Configuration
+
+Now the configuration file will look like this
+
+```json
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "standard-with-typescript"],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "rules": {}
+}
+```
 
 This is the config file
 
