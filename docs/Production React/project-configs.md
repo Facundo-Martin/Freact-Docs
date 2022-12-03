@@ -153,7 +153,7 @@ After we install the dependencies, we can head to our package.json file and chec
 
 ## ESLint Configuration
 
-Now the configuration file will look like this
+The default configuration file will look like this
 
 ```json
 {
@@ -172,64 +172,67 @@ Now the configuration file will look like this
 }
 ```
 
-This is the config file
+This configuration is fully customizable and some developers are quite opinionated about it. Feel free to explore other devs configurations and [ESLint rules](https://eslint.org/docs/latest/rules/).
+Personally, after doing a lot of research and trying out different configurations this is what I ended up using. I suggest you start with this and add rules as you go and feel the need to.
 
 ```json
 {
+  "root": true,
   "env": {
     "browser": true,
-    "es2021": true,
-    // If we are using Jest testing library
-    "jest":true
+    "es6": true,
+    "node": true
   },
-//   Extend current configuration to other configurations (test out later)
-  "extends": [
-    "plugin:react/recommended",
-    "airbnb",
-    "airbnb-typescript",
-    "plugin:@next/next/recommended",
-    "prettier",
-    "plugin:import/typescript",
-    "plugin:prettier/recommended"
-  ],
+  // Fix bug
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "project": "./tsconfig.json", // tells parser relative path of tsconfig.json
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": "latest",
-    "sourceType": "module",
-    // So that ESLint works while compiling and transpiling TypeScript
-    "project": "./ts.config.json"
+    "ecmaVersion": 12,
+    "sourceType": "module"
   },
-  //Make sure to have prettier at the end of the array so it overrides all the previous plugins
-  "plugins": ["react", "testing-library", "prettier"],
-  "overrides": [
-    // Only uses Testing Library lint rules in test files
-    {
-      "files": [
-        "**/__tests__/**/*.[jt]s?(x)",
-        "**/?(*.)+(spec|test).[jt]s?(x)"
-      ],
-      "extends": ["plugin:testing-library/react"]
-    }
+
+  // all plugins (eslint-plugin-xxx) go here:
+  "plugins": [
+    "@typescript-eslint",
+    "@next/eslint-plugin-next", // https://github.com/vercel/next.js/blob/canary/packages/eslint-plugin-next/lib/index.js
+    "prettier"
+  ],
+
+  // all configs (eslint-config-xxx) go here:
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking", // contains rules that specifically require type information
+    "plugin:@next/next/recommended",
+    "next", // awesome configration provided by Next.js, head to https://nextjs.org/docs/basic-features/eslint to learn more
+    "next/core-web-vitals"
   ],
   "rules": {
     // Enforce double quotes for strings instead of single quotes (if you prefer single quotes you can omit this rule)
     "quotes": [
       "error",
       "double",
-        {
-            "avoidEscape": true
-        }
+      {
+        "avoidEscape": true
+      }
     ],
     // Enforce double quotes for strings instead of single quotes (if you prefer single quotes you can omit this rule)
     "@typescript-eslint/quotes": [
-        "error",
-        "double",
-        {
-            "avoidEscape": true
-        }
-    ]
+      "error",
+      "double",
+      {
+        "avoidEscape": true
+      }
+    ],
     // Avoid errors when we don't import React in our components (since React 17 we don't need to)
     "react/react-in-jsx-scope": "off",
     // Avoid errors when you don't use react prop types (since we will be using TypeScript for this)
@@ -247,7 +250,26 @@ This is the config file
 }
 ```
 
-For additional information on rules, you can install Lintel on VSCode and use their GUI to further understand ESLint configuration.
+The default configuration (eslint-config-next) includes everything you need to have an optimal out-of-the-box linting experience in Next.js.
+Recommended rule-sets from the following ESLint plugins are all used within eslint-config-next:
+
+eslint-plugin-react
+eslint-plugin-react-hooks
+eslint-plugin-next
+
+If you get error
+
+```bash
+Failed to load plugin 'prettier' declared in '.eslintrc.json': Cannot find module 'eslint-plugin-prettier'
+```
+
+make sure to run
+
+```
+npm install eslint-plugin-prettier
+```
+
+For additional information on rules, you can install Lintel extension for VSCode and use their GUI to further understand ESLint configuration.
 
 ## Prettier Installation
 
