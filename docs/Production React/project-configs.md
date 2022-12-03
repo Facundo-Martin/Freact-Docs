@@ -8,12 +8,27 @@ Configuring **[Prettier](https://prettier.io/)**, **[ESLint](https://eslint.org/
 
 We will use Prettier for formatting and ESLint for catching bugs and enforcing code styles.
 
-## ESLint Scripts
+## Create Next App
+
+For obvious reasons, we are going to be using [Next.js](https://nextjs.org/).
+
+Note that **TypeScript** and **ESLint** are supported by [create-next-app](https://nextjs.org/docs), just make sure to select **Yes** when asked if you want to include them.
+We will be using npm as our package manager in this guide, but you can opt for yarn or pnpm.
+
+The setup is pretty easy, you just need to run:
+
+```
+npx create-next-app@latest
+```
+
+After that, you can cd into your project and open it in your favorite code editor.
+
+Your **package.json** file should look like this:
 
 ```json
-// package.json file
+// package.json
 {
-  "name": "freact-demo",
+  "name": "freact-demo", //your project name
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -36,31 +51,16 @@ We will use Prettier for formatting and ESLint for catching bugs and enforcing c
 }
 ```
 
-You will be able to run the linter with `npm run lint `
+You will also get an **.eslintrc.json** file that looks like this:
 
 ```json
-// .eslintrc.json file
+// .eslintrc.json
 {
   "extends": "next/core-web-vitals"
 }
 ```
 
-Even though this configuration will get you up & running with ESLint, it does not enforce the codestyle and configurations we want to. Therefore, we will need to make some changes to these files.
-
-```json
-{
-  "name": "nextjs-starter",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "test": "jest",
-    "test:ci": "jest --ci",
-    "lint": "next lint"
-  }
-}
-```
+> Even though this configuration will get you up & running with ESLint, it does not enforce the codestyle and configurations we want to. Therefore, we will need to manually configure ESLint some changes to these files.
 
 ## ESLint Installation
 
@@ -264,6 +264,10 @@ npm install eslint-plugin-prettier
 
 For additional information on rules, you can install Lintel extension for VSCode and use their GUI to further understand ESLint configuration.
 
+## ESLint Fixes
+
+ESLint has a built-in fix feature that will fix most
+
 ## ESLint ignore files
 
 Last but not least, create file .eslintignore at root of project to tell ESLint which files to ignore when linting.
@@ -284,10 +288,6 @@ coverage
 next-env.d.ts
 # next.config.js
 ```
-
-## ESLint Fixes
-
-ESLint has a
 
 ## Prettier Installation
 
