@@ -250,13 +250,6 @@ Personally, after doing a lot of research and trying out different configuration
 }
 ```
 
-The default configuration (eslint-config-next) includes everything you need to have an optimal out-of-the-box linting experience in Next.js.
-Recommended rule-sets from the following ESLint plugins are all used within eslint-config-next:
-
-eslint-plugin-react
-eslint-plugin-react-hooks
-eslint-plugin-next
-
 If you get error
 
 ```bash
@@ -270,6 +263,31 @@ npm install eslint-plugin-prettier
 ```
 
 For additional information on rules, you can install Lintel extension for VSCode and use their GUI to further understand ESLint configuration.
+
+## ESLint ignore files
+
+Last but not least, create file .eslintignore at root of project to tell ESLint which files to ignore when linting.
+
+```
+# don't ever lint node_modules
+**/node_modules/*
+# don't lint build output (make sure it's set to your correct build folder name)
+build
+# don't lint nyc coverage output
+coverage
+**/.next/*
+*.json
+*.lock
+*.css
+*.scss
+**/out/*
+next-env.d.ts
+# next.config.js
+```
+
+## ESLint Fixes
+
+ESLint has a
 
 ## Prettier Installation
 
