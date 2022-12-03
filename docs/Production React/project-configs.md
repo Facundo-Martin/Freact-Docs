@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Initial Configuration
+# Project Configuration
 
 Configuring **[Prettier](https://prettier.io/)**, **[ESLint](https://eslint.org/)**, and **[Git Hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)**
 
@@ -424,29 +424,92 @@ public/
 build/
 ```
 
-## Git Hooks + Husky
+## Git Hooks Introduction
 
-[Git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) are shell scripts found in the hidden .git/hooks directory of a Git repository. These scripts trigger actions in response to specific events, so they can help you **automate your development lifecycle**. There are lots of git hooks, but in this guide we will be primarily looking into the pre-commit hook.
+A [Git hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) is a script that runs at different stages of the git process. These scripts trigger actions in response to specific events, so they can help you **automate your development lifecycle**. There are lots of git hooks, but in this guide **we will be primarily looking into the pre-commit hook**.
 
-The **pre-commit** hook is run first, before you even type in a commit message. It’s used to inspect the snapshot that’s about to be committed, to see if you’ve forgotten something, to make sure tests run, or to examine whatever you need to inspect in the code.
-
-You can do things like check for code style (run lint or something equivalent), check for trailing whitespace (the default hook does exactly this), or check for appropriate documentation on new methods.
+> The **pre-commit** is a hook that runs when a developer is commiting some changes. You can set up scripts that **have to run successfully** or **otherwise it will fail the commit**. The reason you set this up is to enforce code quality standards across your entire development team.
 
 The important thing to understand is that the pre-commit hook will run before the commit. So for the commit to go through, the pre-commit has to succeed.
 
-## Husky
+## Husky Installation
 
-husky-init is a one-time command to quickly initialize a project with husky.
+Many developers that use Git hooks also use [Husky](https://typicode.github.io/husky/#/) to help manage scripts. In this guide, we will be installing Husky to manage our pre-commit hook.
+
+> Husky is a tool that helps developers work with Git hooks more efficiently and run all the scripts that need to work at various stages. By simplifying the process of setting up Git hooks, developers can create effective solutions faster.
+
+We can install and initialize Husky with the following command:
 
 ```
 npx husky-init && npm install
 ```
 
-After running this command, you will notice that a .husky folder was created with a pre-commit file in it.
+**After running this command, you will notice that a .husky folder was created at the root level of your project**.
 
 ## Husky scripts
 
-lint-staged allows you to only run thes commands when certain files are being staged or committed
+If you head to **package.json**, you will notice that a new script was added.
+
+```json
+// package.json file
+{
+  "name": "testing-freact-docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "prettier:fix": "prettier --write .",
+    "prettier:check": "prettier --check .",
+    "prepare": "husky install" //script added during Husky installation
+  },
+  "dependencies": {
+    "@types/node": "18.11.10",
+    "@types/react": "18.0.26",
+    "@types/react-dom": "18.0.9",
+    "eslint-config-next": "13.0.6",
+    "eslint-plugin-prettier": "^4.2.1",
+    "next": "13.0.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "eslint": "^8.29.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.5.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.31.11",
+    "prettier": "2.8.0",
+    "typescript": "^4.9.3",
+    "husky": "^8.0.0" //Husky dev dependency
+  }
+}
+```
+
+## Husky Configuration
+
+This pre-commit hook will be responsible for checking the following:
+
+- There are no Prettier warnings on our code
+- There are no ESLint warnings on our code
+- There are no TypeScript compling errors
+- We can run a valid build using next build
+
+We are going to be using a package called [lint-staged](https://www.npmjs.com/package/lint-staged). According to their description, with this package you can "Run linters against staged git files and don't let 💩 slip into your code base!
+".
+
+This means we are only run linters against staged files instead of the entire codebase. We can install it with:
+
+```
+npm install --save-dev lint-staged
+```
+
+We want to give lint-staged a pettern of files to look for.
 
 ```json
 //package.json file
@@ -469,39 +532,58 @@ lint-staged allows you to only run thes commands when certain files are being st
     }
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "yarn eslint",
-      "yarn lint --fix",
-      "yarn prettier --write",
-      "yarn test"
-
+    // Run these commands against any folder and any file with the following file extensions
+    // We will later fix the src output
+    "**/*.{js,jsx,ts,tsx}": [
+      "tsc --pretty --noEmit",
+      "eslint eslint . --ext ts --ext tsx --ext js",
+      "prettier --write ."
     ]
   }
 ```
 
-We're also gonna take a look at the post-merged hook
+Now all you have to do is head to .husky/pre-commit and replace the last line for `npx lint-staged`
+
+```
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx lint-staged
+```
+
+We are all set! Every time you commit changes, the lint-staged scripts will run.
+
+- **If all checks pass** your commit will go through.
+- **If any checks fail** it will fail the commit, exit, and log errors.
 
 ## VSCode Settings
 
-The last step to finish our configuration is to blabla project settings to ensure every developer uses the same ones
+The last step to finish our configuration is to add some VSCode configurations to ensure the same VSCode settings are shared across the entire development team.
+
+This is a very quick and straight forward process. We just need to create a **.vscode** folder in the root directory and add the 2 following files:
+
+- **settings.json** (general config)
+- **launch.json** (debugging config)
+
+First, we will create the settings.json file:
 
 ```json
 // settings.json
 {
   // sets prettier as formatter
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  // adds format on save feature
+  // run formatter on save and/or paste
   "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
+    "source.fixAll.eslint": true,
+    "source.fixAll.format": true,
     "source.organizeImports": true
   }
 }
 ```
 
-We will also want to create a file named **launch.json** for debugging, also located in the .vscode directory.
-
-Next.js provides us with a nice [debugging template](https://nextjs.org/docs/advanced-features/debugging) that we can use:
+Secondly, we will create the **launch.json** file. Next.js provides us with a nice [debugging template](https://nextjs.org/docs/advanced-features/debugging) that we can use:
 
 ```json
 // launch.json file
