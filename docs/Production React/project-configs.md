@@ -2,11 +2,15 @@
 sidebar_position: 1
 ---
 
-# Project Configs
+# Initial Configuration
 
 Configuring **[Prettier](https://prettier.io/)**, **[ESLint](https://eslint.org/)**, and **[Git Hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)**
 
-We will use Prettier for formatting and ESLint for catching bugs and enforcing code styles.
+In this guide we will go over the following configurations:
+
+- ESLint for catching bugs and enforcing code styles
+- Prettier for formatting our codebase
+- Git Hooks + Husky for automating the former ones when committing changes
 
 ## Create Next App
 
@@ -68,7 +72,7 @@ A linter is a static code analysis tool used to flag programming errors, bugs, s
 
 ESLint statically analyzes your code to quickly find problems. It is built into most text editors and you can run ESLint as part of your continuous integration pipeline.
 
-The first step to configure eslint is to initialize a configifuration file. This can be done from the CLI with the following command:
+The first step to configure [ESLint](https://eslint.org/) is to initialize a configifuration file. This can be done with the following command:
 
 ```JavaScript
 npm init @eslint/config
@@ -81,8 +85,6 @@ ESLint will now ask some questions to configure the project. The following appro
 - To check syntax only
 - To check syntax and find problems
 - **To check syntax, find problems, and enforce code style**
-
-We are going to choose the latter, enforcing [Airbnb code style](https://github.com/airbnb/javascript). This way we are guaranteed to have a consistent codebase and improve the software development process as well as developer experience.
 
 2. What type of modules does your project use?
 
@@ -98,27 +100,21 @@ We are going to choose the first option, since we will be using ES6 import/expor
 - Vue.js
 - None of these
 
-Not much to add here. This is a React guide after all...
-
 4. Does your project use TypeScript? No / **Yes**
-
-Using TypeScript is highly recommended. You can refer to the TypeScript Guide in the Tech Stack section of this documentation.
 
 5. Where does your code run?
 
 - **Browser**
 - Node
 
-Again, we are building a web application with React after all.
-
 6. How would you like to define a style for your project?
 
 - **Use a popular style guide**
 - Answer questions about your style
 
-[Airbnb's code style guide](https://github.com/airbnb/javascript) is a very popular style guide for JavaScript. However, it does not support TypeScript at the moment.
-
 Since we are going to be using TypeScript, we will select the [Standard code style guide](https://github.com/standard/eslint-config-standard-with-typescript).
+
+[Airbnb's code style guide](https://github.com/airbnb/javascript) is a very popular style guide for JavaScript. However, it does not support TypeScript at the moment.
 
 7. What format do you want your config file to be in?
 
@@ -126,21 +122,17 @@ Since we are going to be using TypeScript, we will select the [Standard code sty
 - YAML
 - **JSON**
 
-This is probably just a matter of personal preference, but I recommend using JSON for config files.
+I recommend using JSON for config files, but you can choose JavaScript or YAML if you prefer to.
 
 After we are done with the configuration, ESLint will prompt a message with all the dependencies required
 
-copiar aca eso cuando lo haga
+8. Would you like to install these ? No / **Yes**
 
-Would you like toinstall these ? No / **Yes**
-
-Which package manager do you want to use?
+9. Which package manager do you want to use?
 
 - **npm**
 - yarn
 - pnpm
-
-If you decide to use yarn instead of npm, select no and manually install these with yarn.
 
 Keep in mind that these are all dev dependencies, they will not be shipped into the browser. You might also want to install [eslint-config-airbnb-typescript
 ](https://www.npmjs.com/package/eslint-config-airbnb-typescript), which enhances Airbnb's ESLint config with TypeScript support.
@@ -149,13 +141,12 @@ Keep in mind that these are all dev dependencies, they will not be shipped into 
 npm install eslint-config-airbnb-typescript --save-dev
 ```
 
-After we install the dependencies, we can head to our package.json file and check them out.
-
 ## ESLint Configuration
 
-The default configuration file will look like this
+The default configuration file will look like this:
 
 ```json
+// .eslintrc.json
 {
   "env": {
     "browser": true,
@@ -172,10 +163,12 @@ The default configuration file will look like this
 }
 ```
 
-This configuration is fully customizable and some developers are quite opinionated about it. Feel free to explore other devs configurations and [ESLint rules](https://eslint.org/docs/latest/rules/).
-Personally, after doing a lot of research and trying out different configurations this is what I ended up using. I suggest you start with this and add rules as you go and feel the need to.
+The configuration file is fully customizable, and some developers are quite opinionated about it. Feel free to explore other configurations and [ESLint rules](https://eslint.org/docs/latest/rules/).Personally, after doing a lot of research and trying out different configurations, this is what I opted for.
+
+I suggest you adopt this configuration and add more rules/features as you need to.
 
 ```json
+// Suggested .eslintrc.json configuration
 {
   "root": true,
   "env": {
@@ -250,25 +243,70 @@ Personally, after doing a lot of research and trying out different configuration
 }
 ```
 
-If you get error
+Make sure to also install eslint-plugin-prettier, so you avoid the following error:
 
 ```bash
 Failed to load plugin 'prettier' declared in '.eslintrc.json': Cannot find module 'eslint-plugin-prettier'
 ```
 
-make sure to run
-
 ```
 npm install eslint-plugin-prettier
 ```
 
-For additional information on rules, you can install Lintel extension for VSCode and use their GUI to further understand ESLint configuration.
+- For additional information on rules, you can install Lintel extension for VSCode and use their GUI to further understand ESLint configuration.
 
-## ESLint Fixes
+## ESLint Fix Script
 
-ESLint has a built-in fix feature that will fix most
+After finishing with the configuration file, **we are going to run ESLint to make sure everything is working as expected**.
 
-## ESLint ignore files
+```
+npm run lint
+```
+
+As you run ESLint, you will notice some **errors** and **warnings** in the console. This will mostly be around quotes and other minor code style suggestions.
+
+> ESLint has a built-in fix feature that will fix some of these bugs and code style suggestions. We are going to add the fix script to our package.json file so our linter can handle these bugs for us.
+
+To configure the linter fix feature, we simply need to add the following script:
+
+```json
+// package.json
+{
+  "name": "freact-demo", //your project name
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix" //Adding the lint fix script
+  },
+  "dependencies": {
+    "@types/node": "18.11.10",
+    "@types/react": "18.0.26",
+    "@types/react-dom": "18.0.9",
+    "eslint": "8.28.0",
+    "eslint-config-next": "13.0.6",
+    "next": "13.0.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "4.9.3"
+  }
+}
+```
+
+After doing this, simply run:
+
+```
+npm run lint:fix
+```
+
+You will notice how our linter handled these bugs for us.
+
+> Later in this guide, we will automate this linter and fix scripts so we don't have to manually run them while writing code and commiting changes.
+
+## ESLint Ignore Files
 
 Last but not least, create file .eslintignore at root of project to tell ESLint which files to ignore when linting.
 
@@ -289,6 +327,8 @@ next-env.d.ts
 # next.config.js
 ```
 
+**Congratulations! You have succesfully configured ESLint.**
+
 ## Prettier Installation
 
 Prettier is an opinionated code formatter with support for:
@@ -303,23 +343,33 @@ Prettier is an opinionated code formatter with support for:
 
 It removes all original styling and ensures that all outputted code conforms to a consistent style.
 
-Many developers use Prettier extension in VSCode. However, it is recommended to have a local prettier configuration when building a production grade application.
+> Many developers use [Prettier extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) in VSCode. However, it is recommended to have a **local prettier configuration** when building a production grade application so **the entire development team** shares the same configuration.
 
-First, install Prettier locally:
+First, we will install Prettier locally:
 
 ```
 npm install --save-dev --save-exact prettier
 ```
 
-Next, create a .prettierignore file to let the Prettier CLI and editors know which files to not format. Here’s an example:
+## Prettier configuration
 
-```
-node_modules/
-public/
-build/
+Secondly, create a **.prettierrc** configuration. Prettier ships with a handful of [format options](https://prettier.io/docs/en/options.html) to fully customize your experience, but here's a base configuration example:
+
+```json
+// .prettierrc file
+{
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "trailingComma": "all"
+}
 ```
 
 ## Prettier scripts
+
+Check if they will set it for you
 
 ```json
 {
@@ -334,24 +384,19 @@ build/
   },
 ```
 
-You can run these scripts manually to try them out, but after installing ESLint we will automate these with Git Hooks + Husky.
+You can run these scripts manually to try them out, but we will automate these with Git Hooks + Husky.
 
-## Prettier configuration
+## Prettier Ignore Files
 
-Last but not least, create a **.prettierrc** configuration file to fully customize your experience. Prettier ships with a handful of [format options](https://prettier.io/docs/en/options.html) to fully customize your experience, but here's a base configuration example:
+Last but not least, create a **.prettierignore** file to let the Prettier CLI and editors know which files not to format. Here’s an example:
 
-```json
-{
-"printWidth": 80
-"tabWidth": 2,
-"useTabs":false,
-"semi": true,
-"singleQuote": false,
-"trailingComma": "all"
-}
+```
+node_modules/
+public/
+build/
 ```
 
-If you are using VSCode, make sure to go to Settings > Formatter and select Prettier as your Default Formatter. You will also want to enable the "Format on Save" option
+## VSCode Configuration
 
 ## Git Hooks + Husky
 
@@ -414,12 +459,4 @@ We're also gonna take a look at the post-merged hook
 
 Running ESLint, or prettier, or even tests as part of your git workflow is important because it helps you fail fast. However, it's not a replacement for CI checks. Typically, you'll want to run these commands in both environments to ensure nothing slips through.
 
-But altogether these tools help ensure a cleaner, more consistent production codebase. Long term, that's a big win for any project.
-
-- Read the [official documentation](https://docusaurus.io/)
-- Modify your site configuration with [`docusaurus.config.js`](https://docusaurus.io/docs/api/docusaurus-config)
-- Add navbar and footer items with [`themeConfig`](https://docusaurus.io/docs/api/themes/configuration)
-- Add a custom [Design and Layout](https://docusaurus.io/docs/styling-layout)
-- Add a [search bar](https://docusaurus.io/docs/search)
-- Find inspirations in the [Docusaurus showcase](https://docusaurus.io/showcase)
-- Get involved in the [Docusaurus Community](https://docusaurus.io/community/support)
+But altogether these tools help ensure a cleaner, more consistent production codebase.
