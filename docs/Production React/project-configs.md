@@ -126,7 +126,7 @@ I recommend using JSON for config files, but you can choose JavaScript or YAML i
 
 After we are done with the configuration, ESLint will prompt a message with all the dependencies required
 
-8. Would you like to install these ? No / **Yes**
+8. Would you like to install them now? No / **Yes**
 
 9. Which package manager do you want to use?
 
@@ -134,16 +134,13 @@ After we are done with the configuration, ESLint will prompt a message with all 
 - yarn
 - pnpm
 
-Keep in mind that these are all dev dependencies, they will not be shipped into the browser. You might also want to install [eslint-config-airbnb-typescript
-](https://www.npmjs.com/package/eslint-config-airbnb-typescript), which enhances Airbnb's ESLint config with TypeScript support.
+ESLint will proceed to install these dependencies, which you will be able to see in your **package.json** file under "devDependencies".
 
-```
-npm install eslint-config-airbnb-typescript --save-dev
-```
+> Keep in mind that these are all dev dependencies. These are packages used for development purposes, but they’re not actually included in the app’s production bundle.
 
 ## ESLint Configuration
 
-The default configuration file will look like this:
+After the installation, the default configuration file will look like this:
 
 ```json
 // .eslintrc.json
@@ -163,7 +160,7 @@ The default configuration file will look like this:
 }
 ```
 
-The configuration file is fully customizable, and some developers are quite opinionated about it. Feel free to explore other configurations and [ESLint rules](https://eslint.org/docs/latest/rules/).Personally, after doing a lot of research and trying out different configurations, this is what I opted for.
+The configuration file is fully customizable, and some developers are quite opinionated about it. Feel free to explore other configurations and [ESLint rules](https://eslint.org/docs/latest/rules/). Personally, after doing a lot of research and trying out different configurations, this is what I opted for.
 
 I suggest you adopt this configuration and add more rules/features as you need to.
 
@@ -243,7 +240,7 @@ I suggest you adopt this configuration and add more rules/features as you need t
 }
 ```
 
-Make sure to also install eslint-plugin-prettier, so you avoid the following error:
+Make sure to also install [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier), so you avoid the following error:
 
 ```bash
 Failed to load plugin 'prettier' declared in '.eslintrc.json': Cannot find module 'eslint-plugin-prettier'
@@ -255,7 +252,7 @@ npm install eslint-plugin-prettier
 
 - For additional information on rules, you can install Lintel extension for VSCode and use their GUI to further understand ESLint configuration.
 
-## ESLint Fix Script
+## ESLint Linting
 
 After finishing with the configuration file, **we are going to run ESLint to make sure everything is working as expected**.
 
@@ -263,11 +260,33 @@ After finishing with the configuration file, **we are going to run ESLint to mak
 npm run lint
 ```
 
-As you run ESLint, you will notice some **errors** and **warnings** in the console. This will mostly be around quotes and other minor code style suggestions.
+As you run ESLint, you will notice some **errors** and **warnings** in the console. This will mostly be around quotes and other minor code style suggestions. Here is an example:
 
-> ESLint has a built-in fix feature that will fix some of these bugs and code style suggestions. We are going to add the fix script to our package.json file so our linter can handle these bugs for us.
+```bash
+npm run lint
+
+> testing-freact-docs@0.1.0 lint
+> next lint
+
+./pages/\_app.tsx
+1:8 Error: Replace `'../styles/globals.css'` with `"../styles/globals.css";` prettier/prettier
+1:8 Error: Strings must use doublequote. quotes
+1:8 Error: Strings must use doublequote. @typescript-eslint/quotes
+2:31 Error: Replace `'next/app'` with `"next/app";` prettier/prettier
+2:31 Error: Strings must use doublequote. quotes
+2:31 Error: Strings must use doublequote. @typescript-eslint/quotes
+5:38 Error: Insert `;` prettier/prettier
+```
+
+**These are things you don't want to manually fix yourself one by one. Fortunately, you don't have to**.
+
+## ESLint Fix Script
+
+ESLint has a built-in fix feature that will fix most of these issues. We are going to add the fix script to our **package.json** file so our linter can handle them for us.
 
 To configure the linter fix feature, we simply need to add the following script:
+
+`"lint:fix": "next lint --fix"`
 
 ```json
 // package.json
@@ -302,13 +321,22 @@ After doing this, simply run:
 npm run lint:fix
 ```
 
-You will notice how our linter handled these bugs for us.
+**You will notice how our linter fixed these issues for us**.
 
-> Later in this guide, we will automate this linter and fix scripts so we don't have to manually run them while writing code and commiting changes.
+```bash
+npm run lint:fix
+
+> testing-freact-docs@0.1.0 lint:fix
+> next lint --fix
+
+✔ No ESLint warnings or errors
+```
+
+> Later on, we will automate this lint and fix scripts so we don't have to manually run them while writing code and commiting changes.
 
 ## ESLint Ignore Files
 
-Last but not least, create file .eslintignore at root of project to tell ESLint which files to ignore when linting.
+Last but not least, create the file **.eslintignore** at root of project to tell ESLint which files to ignore when linting.
 
 ```
 # don't ever lint node_modules
@@ -353,7 +381,7 @@ npm install --save-dev --save-exact prettier
 
 ## Prettier configuration
 
-Secondly, create a **.prettierrc** configuration. Prettier ships with a handful of [format options](https://prettier.io/docs/en/options.html) to fully customize your experience, but here's a base configuration example:
+Secondly, create a **.prettierrc** configuration in your root directory. Prettier ships with a handful of [format options](https://prettier.io/docs/en/options.html) to fully customize your experience, but here's a base configuration example:
 
 ```json
 // .prettierrc file
@@ -369,7 +397,7 @@ Secondly, create a **.prettierrc** configuration. Prettier ships with a handful 
 
 ## Prettier scripts
 
-Check if they will set it for you
+Now that prettier is configured, we simply need to add 2 scripts in our **package.json** file.
 
 ```json
 {
@@ -395,8 +423,6 @@ node_modules/
 public/
 build/
 ```
-
-## VSCode Configuration
 
 ## Git Hooks + Husky
 
@@ -454,6 +480,62 @@ lint-staged allows you to only run thes commands when certain files are being st
 ```
 
 We're also gonna take a look at the post-merged hook
+
+## VSCode Settings
+
+The last step to finish our configuration is to blabla project settings to ensure every developer uses the same ones
+
+```json
+// settings.json
+{
+  // sets prettier as formatter
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // adds format on save feature
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true
+  }
+}
+```
+
+We will also want to create a file named **launch.json** for debugging, also located in the .vscode directory.
+
+Next.js provides us with a nice [debugging template](https://nextjs.org/docs/advanced-features/debugging) that we can use:
+
+```json
+// launch.json file
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js: debug server-side",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev"
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000"
+    },
+    {
+      "name": "Next.js: debug full stack",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "serverReadyAction": {
+        "pattern": "started server on .+, url: (https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      }
+    }
+  ]
+}
+```
+
+You can then head to the debugger tab in VSCode and select a debugger from the dropdown menu. You can also debug in the browser using ChromeDevTools.
 
 ## What's next?
 
