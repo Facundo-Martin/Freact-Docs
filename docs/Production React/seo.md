@@ -247,6 +247,8 @@ export default function Document() {
 
 ## What's next?
 
-```
+Metatags, custom documents, and SEO testing tools can help us boost our web application's SEO.
 
-```
+Nonetheless, SEO performance and Google rankings are heavily tied to accesibility and overall site performance. Having a fast and accesible web application will impact greatly in how search engines index and rank our pages.
+
+In the next guide, we will explore how to improve web accesibility using best practices and following [WAI-ARIA](https://www.w3.org/WAI/standards-guidelines/aria/) standards.
