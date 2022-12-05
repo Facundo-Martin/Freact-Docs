@@ -21,7 +21,7 @@ Within it, you can provide details as simple as the title of a page or as specif
 
 In this guide we will learn how to leverage these tools to improve the SEO performance of our web application.
 
-## SEO Audit
+## SEO Auditing
 
 If you already have a web application and want to assess its SEO performance, you can audit your site using [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/).
 
@@ -41,7 +41,7 @@ If you don't have a web application yet, you can build the SEO component with th
 
 ## SEO Component in Next.js
 
-Next.js provides us with an optimized [next/head](https://nextjs.org/docs/api-reference/next/head) component to handle our meta tags. In this section, we will be leveraging this component to build a highly reusbale SEO component. We will then implement this component in each of our pages to boos SEO performance.
+Next.js provides us with an optimized [next/head](https://nextjs.org/docs/api-reference/next/head) component to handle our meta tags. In this section, we will be leveraging this component to build a highly reusbale SEO component. We will then implement this component in each of our pages to boost SEO performance.
 
 Here is an updated version of the Next.js SEO component that includes the next/head component and additional Twitter and Facebook meta tags:
 
@@ -83,12 +83,6 @@ export default function SEO(props: SEOProps) {
   return (
     <Head>
       <title key="title">{title}</title>
-      // https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      define charset for HTML5 Doctype
-      <meta charSet="utf-8" />
-      <meta key="og_sitename" property="og:site_name" content={siteName} />
-      <meta property="og:locale" content="en_US" />
       // Basic Open Graph tags
       <meta key="og_title" property="og:title" content={title} />
       <meta key="description" name="description" content={description} />
@@ -133,58 +127,126 @@ export default function SEO(props: SEOProps) {
 
 To use this component, you can import it into your Next.js page and include it as part of the page's element. For example:
 
-```TypeScript
-import SEO from './SEO';
+```tsx
+import SEO from "./SEO";
 
-const MyPage = () => (
-<>
-<SEO
-title="My Page"
-description="This is my page"
-image="https://my-page.com/image.jpg"
-url="https://my-page.com"
-twitterHandle="@mypage"
-author="John Doe"
-keywords={['my', 'page', 'example']}
-language="en"
-country="US"
-/>
-</>
-);
-
+export default function Home() {
+  return (
+    <>
+      <SEO
+        title="My Page"
+        description="This is my page"
+        image="https://my-page.com/image.jpg"
+        url="https://my-page.com"
+        twitterHandle="@mypage"
+        author="John Doe"
+        keywords={["my", "page", "example"]}
+      />
+    </>
+  );
+}
 ```
 
 In this example, the SEO component will add the appropriate meta tags to the page's element, using the provided props to populate the values of the tags. This will help ensure that search engines can properly index your page and provide the right information to users who share your page on social media.
 
-## SEO Social Media Testing
+## SEO Testing Tools
 
-Some of these apps will have built-in debuggers. These will allow you to do the following:
+There are many tools to test SEO performance and metatags, from Chrome extension to specific social media debuggers. Here are a few recommendations
 
-- Preview
-- Provide feedback
+- [SEO Minion Chrome Extension](https://chrome.google.com/webstore/detail/seo-minion/giihipjfimkajhlcilipnjeohabimjhi)
 
-https://developers.facebook.com/tools/debug
+  - SEO Minion helps you in your daily SEO tasks such as On-Page SEO analysis, Broken Link Checking, SERP Preview and more
 
-## SEO Social Media
+- [Accesibility Insights Chrome Extension](https://chrome.google.com/webstore/detail/accessibility-insights-fo/pbjjkligggfmakdaogkfomddhfmpjeni?hl=en) (more on this later)
 
-You might want to target specific social media apps with your tags. We will not be exploring these tags here, but feel free to read their official documentation on how to use Open Graph tags for their sites:
+  - Accessibility Insights for Web helps developers quickly find and fix accessibility issues.
 
-- [Twitter](https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started)
-- [Facebook](https://developers.facebook.com/docs/sharing/webmasters/)
-- [Pinterest](https://developers.pinterest.com/docs/rich-pins/rich-pins/)
-- [LinkedIn](https://www.linkedin.com/help/linkedin/answer/a521928/making-your-website-shareable-on-linkedin?lang=en)
+- [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/)
 
-## SEO Robots.txt
+  - Discover how to optimize your content for better engagement on LinkedIn
 
-A robots.txt file tells search engine crawlers which URLs the crawler can access on your site. This is used mainly to avoid overloading your site with requests; it is not a mechanism for keeping a web page out of Google. To keep a web page out of Google, block indexing with noindex or password-protect the page.
+- [Twitter Card Validator](https://cards-dev.twitter.com/validator)
 
-## SEO Tools
+  - Optimize Tweets with Twitter Card
 
-Google search console
+- [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
+
+  - You can use the Sharing Debugger to see the information that is used when your website content is shared on Facebook, Messenger and other places
 
 ## Crawling and Indexing
 
-When working on Search Engine Optimization, there are several key parts that impact Crawling and Indexing. With the above SEO component and implementation, we have provided our web application with solid SEO principles. Nonetheless, there are scenarios where you might want to **add further configurations**.
+When working on Search Engine Optimization, there are several key parts that impact Crawling and Indexing.
+
+> With the above SEO component and implementation, we have provided our web application with solid SEO principles. Nonetheless, there are scenarios where you might want to **add further configurations**.
 
 Since these files are quite specific to each project and needs, we will not be covering them in this guide. But Next.js has a Crawling and Indexing tutorial where they
 topics such as how to [create a robots.txt file](https://nextjs.org/learn/seo/crawling-and-indexing/robots-txt) and how to [create an XML sitemap](https://nextjs.org/learn/seo/crawling-and-indexing/xml-sitemaps).
+
+An example of this is if you want to disable crawlers for specific API routes.
+
+**Keep in mind that these are very specific files**.
+
+If you implement the right SEO tags and your Lighthouse scores are good, then there's probably no need to dive into these.
+
+## Next.js Custom Document
+
+Next.js gives us the possibility to add a [Custom Document](https://nextjs.org/docs/advanced-features/custom-document) at the page level.
+
+> A custom Document can update the **html** and **body** tags used to render a Page. Custom attributes are allowed as props. For example, we might want to add lang="en" to the **html** tag.
+
+To override the default Document, create the file pages/\_document.tsx as shown below:
+
+```tsx
+// pages/_document.tsx
+import { Html, Head, Main, NextScript } from "next/document";
+
+export default function Document() {
+  return (
+    <Html>
+      <Head />
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+}
+```
+
+Once we create the Custom Document component, we can start adding custom props to our website. Here is my recommended Custom Document configuration:
+
+```tsx
+// pages/_document.tsx
+import { Html, Head, Main, NextScript } from "next/document";
+
+export default function Document() {
+  return (
+    <Html lang="en">
+      <Head>
+        {/* Viewport tag https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag*/}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {/* Define charset for HTML5 Doctype */}
+        <meta charSet="utf-8" />
+        {/* Add the name of your site here */}
+        <meta
+          key="og_sitename"
+          property="og:site_name"
+          content="Your Site Name Here"
+        />
+        {/* Location */}
+        <meta property="og:locale" content="en_US" />
+      </Head>
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
+}
+```
+
+## What's next?
+
+```
+
+```
