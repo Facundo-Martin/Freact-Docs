@@ -30,7 +30,19 @@ The `build` folder is now served at [http://localhost:3000/](http://localhost:30
 
 You can now deploy the `build` folder **almost anywhere** easily, **for free** or very small cost (read the **[Deployment Guide](https://docusaurus.io/docs/deployment)**).
 
+## SEO Audit
+
+If you already have a web application and want to assess its SEO performance, you can audit your site using lighthouse.
+
+This is a simple and straight forward process, since lighthouse is built into the ChromeDevTools.
+
+Keep in mind that SEO and Accesibility go hand in hand, so in order to boost your SEO performance you will need to work on accessibility as well. This include alt tags for images, relevant headings, support for screen readers, and more. We will be going over these on the next guide.
+
+Accesibility -> semantic html, main, etc
+
 ## SEO Component in Next.js
+
+Next.js provides us with an optimized [next/head](https://nextjs.org/docs/api-reference/next/head) component to handle our meta tags. In this section, we will be leveraging this component to build a highly reusbale SEO component. We will then implement this component in each of our pages to boos SEO performance.
 
 Here is an updated version of the Next.js SEO component that includes the next/head component and additional Twitter and Facebook meta tags:
 
@@ -62,27 +74,45 @@ export default function SEO(props: SEOProps) {
     language = "en",
     country,
   } = props;
+
   return (
     <Head>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta name="image" content={image} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:url" content={url} />
-      <meta property="og:type" content="website" />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
-      <meta name="twitter:creator" content={twitterHandle} />
-      <meta name="author" content={author} />
-      {keywords && keywords.length > 0 && (
-        <meta name="keywords" content={keywords.join(", ")} />
+      <title key="title">{title}</title>
+      <meta key="description" name="description" content={description} />
+      <meta key="image" name="image" content={image} />
+      <meta key="og_title" property="og:title" content={title} />
+      <meta
+        key="og_description"
+        property="og:description"
+        content={description}
+      />
+      <meta key="og_image" property="og:image" content={image} />
+      <meta key="og_url" property="og:url" content={url} />
+      <meta key="og_type" property="og:type" content="website" />
+      <meta
+        key="twitter:card"
+        name="twitter:card"
+        content="summary_large_image"
+      />
+      <meta key="twitter_title" name="twitter:title" content={title} />
+      <meta
+        key="twitter:description"
+        name="twitter:description"
+        content={description}
+      />
+      <meta key="twitter_image" name="twitter:image" content={image} />
+      <meta
+        key="twitter_creator"
+        name="twitter:creator"
+        content={twitterHandle}
+      />
+      <meta key="author" name="author" content={author} />
+      {keywords.length > 0 && (
+        <meta key="keywords" name="keywords" content={keywords.join(", ")} />
       )}
-      {language && <meta name="language" content={language} />}
-      {country && <meta name="country" content={country} />}
+      {language && <meta key="language" name="language" content={language} />}
+      {country && <meta key="country" name="country" content={country} />}
+      <meta property="og:locale" content="en_US" />
     </Head>
   );
 }
