@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 3
 ---
 
 # Project Architecture
@@ -50,7 +50,7 @@ The best architecture and folder structure for an enterprise Next.js web applica
 
 The "monorepo" structure involves creating a single repository for the entire project, with separate directories for different components components and features. For example, the directory structure might look something like this:
 
-Copy code
+```
 /
 /components
 /lib
@@ -58,6 +58,8 @@ Copy code
 /static
 /styles
 /utils
+```
+
 The components directory would contain all of the reusable components that make up the user interface, such as buttons and form fields. The lib directory would contain utility functions and other shared code that is used throughout the project. The pages directory would contain the individual pages of the application, and the static directory would contain any static assets such as images and fonts. The styles directory would contain CSS files and the utils directory would contain utility functions that are specific to the project.
 
 The "microfrontend" architecture involves creating a separate repository for each feature or microservice of the application, and using a "root" repository to tie everything together. For example, the directory structure might look something like this:
