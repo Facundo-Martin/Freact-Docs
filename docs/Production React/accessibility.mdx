@@ -1,0 +1,50 @@
+---
+sidebar_position: 7
+---
+
+# Accessibility
+
+Accessibility checklist and aspects to take into account
+
+As web developers, it's important to ensure that our applications are accessible to users with disabilities. This not only benefits those users, but it can also improve the overall user experience for all visitors to our website.
+
+One way to implement accessibility in Next.js web applications is by following the WAI-ARIA standards. WAI-ARIA (Web Accessibility Initiative - Accessible Rich Internet Applications) is a set of guidelines for making web content and applications more accessible to people with disabilities.
+
+Here are some examples of how to implement WAI-ARIA standards in a Next.js web application:
+
+Input Fields
+Input fields, such as text boxes and dropdown menus, should be labeled with a label tag. This allows screen readers to identify the purpose of the input field and provide appropriate instructions to the user.
+
+For example:
+
+<label for="email">Email:</label>
+<input type="text" id="email" name="email" aria-label="Email" />
+In this code, the <label> tag has a for attribute that matches the id attribute of the <input> element. This connects the two elements and allows the screen reader to associate the label with the input field. The aria-label attribute provides additional information to the screen reader about the purpose of the input field.
+
+Alt Tags for Images
+Images should always include an alt attribute that describes the image's content. This allows screen readers to convey information about the image to users who are unable to see it.
+
+For example:
+
+Copy code
+
+<img src="logo.png" alt="Company logo" />
+In this code, the alt attribute provides a brief description of the image, which
+will be read by the screen reader to the user.
+
+Screen Reader Attributes
+WAI-ARIA provides a number of attributes that can be added to HTML elements to improve their accessibility. For example, the role attribute can be used to indicate the purpose of an element, such as a button or a checkbox. The aria-label attribute can be used to provide a more descriptive label for an element.
+
+For example:
+
+Copy code
+
+<button role="button" aria-label="Submit form">
+  Submit
+</button>
+In this code, the role attribute indicates that the element is a button, and the
+aria-label attribute provides a more descriptive label for the button. This allows
+screen readers to provide more detailed information to the user.
+
+Implementing WAI-ARIA standards in a Next.js web application can improve the accessibility of the application and provide a better experience for users with disabilities. By using <label> tags for input fields, alt attributes for images, and screen reader attributes such as role and aria-label, we can make our applications more accessible and user-friendly for all visitors.
+A new blog post is now available at [http://localhost:3000/blog/greetings](http://localhost:3000/blog/greetings).
