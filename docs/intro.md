@@ -9,7 +9,7 @@ Freact is a **Front End + React Documentation site** built with the mission of h
 
 It's main objective is to supplement the uncertainty and lack of guidance when it comes to building React applications. Some of the topics that will be discussed are:
 
-- Choosing the right [Tech Stack](https://nodejs.org/en/download/) (Frameworks and UI libraries)
+- Choosing the right Tech Stack (Frameworks and UI libraries)
 - Initial configuration (prettier, eslint, git hooks)
 - CI/CD pipelines
 - Project Architecture
